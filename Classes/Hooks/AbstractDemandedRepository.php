@@ -51,6 +51,7 @@ class AbstractDemandedRepository
         array &$constraints
     ) {
         $eventRestriction = $demand->getEventRestriction();
+        $eventFilterByLocation = $demand->getEventFilterByLocation();
 
         /** @var QueryInterface $query */
         if ($eventRestriction === Demand::EVENT_RESTRICTION_NO_EVENTS) {
@@ -91,6 +92,10 @@ class AbstractDemandedRepository
             $locations = $demand->getLocations();
             if (!empty($locations)) {
                 $constraints[] = $query->in('location', $locations);
+            }
+
+            if (!empty($eventFilterByLocation)) {
+                $constraints[] = $query->equals('location', $eventFilterByLocation);
             }
 
             // Time start
